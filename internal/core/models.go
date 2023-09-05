@@ -25,3 +25,13 @@ type Limit struct {
 }
 
 type Orders []*Order
+
+type SnapshotOfCandlesticks struct {
+    Date int64
+    Time int64
+    OpenPrice Money
+    HighPrice Money
+    LowPrice Money
+    ClosePrice Money
+    TradedVolume Money
+}

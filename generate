@@ -1,0 +1,52 @@
+#!/bin/bash
+
+# Create the cmd directory
+mkdir -p cmd/market_data_service
+mkdir -p cmd/trading_strategy_service
+mkdir -p cmd/order_management_service
+mkdir -p cmd/risk_management_service
+mkdir -p cmd/notification_service
+mkdir -p cmd/health_check_service
+# Optional: Create the config_and_discovery_service directory
+mkdir -p cmd/config_and_discovery_service
+
+# Create the internal directory structure for each microservice
+for service in marketdata tradingstrategy ordermanagement riskmanagement notification healthcheck; do
+  mkdir -p internal/$service/application
+  mkdir -p internal/$service/domain
+  mkdir -p internal/$service/infrastructure
+done
+
+# Create the shared directory structure
+mkdir -p pkg/shared/domain
+mkdir -p pkg/shared/errors
+mkdir -p pkg/shared/logging
+mkdir -p pkg/shared/messaging
+mkdir -p pkg/shared/utils
+
+# Create the deployments directory structure
+for service in market_data_service trading_strategy_service order_management_service risk_management_service notification_service health_check_service; do
+  mkdir -p deployments/docker/$service
+  mkdir -p deployments/kubernetes/$service
+done
+
+# Create the configs directory
+mkdir -p configs
+
+# Create the scripts and tests directories
+mkdir -p scripts
+mkdir -p tests
+
+# Optionally, create configuration files for each microservice
+for service in market_data_service trading_strategy_service order_management_service risk_management_service notification_service health_check_service; do
+  touch configs/$service.yaml
+done
+
+# Optionally, create Dockerfiles and Kubernetes manifests
+for service in market_data_service trading_strategy_service order_management_service risk_management_service notification_service health_check_service config_and_discovery_service; do
+  touch deployments/docker/$service/Dockerfile
+  touch deployments/kubernetes/$service/$service.yaml
+done
+
+echo "TraderMac project structure created successfully!"
+
