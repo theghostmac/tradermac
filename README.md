@@ -16,7 +16,6 @@ Initial Options Holding: No options initially
 New Cash Balance: $ 9950
 New Options Holding:
 - {Call 150.00 2023-11-12 14:41:33.476395 +0100 WAT m=+0.000110918 AAPL}: 5 contracts
-
 ```
 
 ## TODO:
