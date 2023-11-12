@@ -1,6 +1,9 @@
 package options
 
-import "time"
+import (
+	"fmt"
+	"time"
+)
 
 // OptionType is the type of option, either "Call" or "Put".
 type OptionType string
@@ -16,6 +19,11 @@ type Option struct {
 	StrikePrice     float64
 	ExpirationDate  time.Time
 	UnderlyingAsset string // Symbol of identifier of underlying security or commodity.
+}
+
+// String method for Option to specify how it should be printed.
+func (o Option) String() string {
+	return fmt.Sprintf("{%s %.2f %s %s}", o.Type, o.StrikePrice, o.ExpirationDate, o.UnderlyingAsset)
 }
 
 // OptionContract represents a specific options contract.

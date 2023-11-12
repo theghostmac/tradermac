@@ -72,9 +72,10 @@ func ValidateTradeOrders(order TradeOrder, currentPrice float64) error {
 
 // ExecuteTrade executes a trade order and updates the trader's portfolio.
 func ExecuteTrade(portfolio *Portfolio, order TradeOrder) error {
-	if order.Action == Buy {
-		cost := order.OrderPrice * float64(order.Quantity)
+	cost := order.OrderPrice * float64(order.Quantity)
 
+	switch order.Action {
+	case Buy:
 		// Check if the trader has sufficient funds.
 		if cost > portfolio.CashBalance {
 			return ErrInsufficientFunds
@@ -84,15 +85,16 @@ func ExecuteTrade(portfolio *Portfolio, order TradeOrder) error {
 		portfolio.CashBalance -= cost
 		contract := OptionContract{
 			Option:       order.Option,
-			ContractID:   order.PortfolioID, // TODO: just for simplicity, change later.
+			ContractID:   order.PortfolioID, // TODO: Change for better contract identification.
 			ContractSize: order.Quantity,
 		}
 		portfolio.OptionsHolding[contract] += order.Quantity
-	} else if order.Action == Sell {
+
+	case Sell:
 		// Check if the seller has enough contracts to sell.
 		contract := OptionContract{
 			Option:     order.Option,
-			ContractID: order.PortfolioID, // TODO: just for simplicity, change later.
+			ContractID: order.PortfolioID, // TODO: Change for better contract identification.
 		}
 
 		if order.Quantity > portfolio.OptionsHolding[contract] {
@@ -103,6 +105,9 @@ func ExecuteTrade(portfolio *Portfolio, order TradeOrder) error {
 		revenue := order.OrderPrice * float64(order.Quantity)
 		portfolio.CashBalance += revenue
 		portfolio.OptionsHolding[contract] -= order.Quantity
+
+	default:
+		return ErrInvalidTradeAction
 	}
 
 	return nil
