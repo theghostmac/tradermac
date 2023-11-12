@@ -55,17 +55,55 @@ func ValidateTradeOrders(order TradeOrder, currentPrice float64) error {
 	return ErrInvalidTradeAction
 }
 
-// ExecuteTrade executes a trade order and returns the resulting position.
-func ExecuteTrade(currentPosition uint, order TradeOrder) (uint, error) {
+//// ExecuteTrade executes a trade order and returns the resulting position.
+//func ExecuteTrade(currentPosition uint, order TradeOrder) (uint, error) {
+//	if order.Action == Buy {
+//		return currentPosition + order.Quantity, nil
+//	} else if order.Action == Sell {
+//		// Check if seller has enough contracts to sell.
+//		if currentPosition < order.Quantity {
+//			return currentPosition, ErrInsufficientContract
+//		}
+//		return currentPosition - order.Quantity, nil
+//	}
+//
+//	return currentPosition, ErrInvalidTradeAction
+//}
+
+// ExecuteTrade executes a trade order and updates the trader's portfolio.
+func ExecuteTrade(portfolio *Portfolio, order TradeOrder) error {
 	if order.Action == Buy {
-		return currentPosition + order.Quantity, nil
-	} else if order.Action == Sell {
-		// Check if seller has enough contracts to sell.
-		if currentPosition < order.Quantity {
-			return currentPosition, ErrInsufficientContract
+		cost := order.OrderPrice * float64(order.Quantity)
+
+		// Check if the trader has sufficient funds.
+		if cost > portfolio.CashBalance {
+			return ErrInsufficientFunds
 		}
-		return currentPosition - order.Quantity, nil
+
+		// Update the cash balance and options holding.
+		portfolio.CashBalance -= cost
+		contract := OptionContract{
+			Option:       order.Option,
+			ContractID:   order.PortfolioID, // TODO: just for simplicity, change later.
+			ContractSize: order.Quantity,
+		}
+		portfolio.OptionsHolding[contract] += order.Quantity
+	} else if order.Action == Sell {
+		// Check if the seller has enough contracts to sell.
+		contract := OptionContract{
+			Option:     order.Option,
+			ContractID: order.PortfolioID, // TODO: just for simplicity, change later.
+		}
+
+		if order.Quantity > portfolio.OptionsHolding[contract] {
+			return ErrInsufficientContract
+		}
+
+		// Update the cash balance and options holding.
+		revenue := order.OrderPrice * float64(order.Quantity)
+		portfolio.CashBalance += revenue
+		portfolio.OptionsHolding[contract] -= order.Quantity
 	}
 
-	return currentPosition, ErrInvalidTradeAction
+	return nil
 }

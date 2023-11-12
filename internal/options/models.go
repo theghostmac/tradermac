@@ -40,5 +40,12 @@ type TradeOrder struct {
 	OrderPrice            float64
 	OrderStatus           string // either "Open", "Filled", or "Cancelled"
 	OrderTimeStamp        time.Time
+	PortfolioID           uint
 	OrderExecutionDetails string
+}
+
+// Portfolio represents the trader's portfolio.
+type Portfolio struct {
+	CashBalance    float64
+	OptionsHolding map[OptionContract]uint
 }
