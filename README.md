@@ -27,4 +27,11 @@ New Options Holding:
 - [x] Document Learnings
 - [x] Test with main function.
 - [ ] Remodel the UnderlyingAsset
-- [ ] 
+- [ ] Setup trader modeling and management | CRUD operations for trader.
+- [ ] Write the logic to execute actual trades from a live source.
+- [ ] Setup pipeline to simulate the execution of paper trades with a Brokerage API
+- [ ] Eventually set pipeline to execute real trades with the Brokerage API
+- [ ] Efficiently handle the TradeOrder OrderStatus property.
+- [ ] Setup pipeline to external market data sources to get real-time/historical data for each underlying asset supported. (useful for pricing options, trading strategy, risk mgt).
+- [ ] Add logging and maybe monitoring
+- [ ] Write tests for everything until Coverage > 70%
