@@ -55,21 +55,6 @@ func ValidateTradeOrders(order TradeOrder, currentPrice float64) error {
 	return ErrInvalidTradeAction
 }
 
-//// ExecuteTrade executes a trade order and returns the resulting position.
-//func ExecuteTrade(currentPosition uint, order TradeOrder) (uint, error) {
-//	if order.Action == Buy {
-//		return currentPosition + order.Quantity, nil
-//	} else if order.Action == Sell {
-//		// Check if seller has enough contracts to sell.
-//		if currentPosition < order.Quantity {
-//			return currentPosition, ErrInsufficientContract
-//		}
-//		return currentPosition - order.Quantity, nil
-//	}
-//
-//	return currentPosition, ErrInvalidTradeAction
-//}
-
 // ExecuteTrade executes a trade order and updates the trader's portfolio.
 func ExecuteTrade(portfolio *Portfolio, order TradeOrder) error {
 	cost := order.OrderPrice * float64(order.Quantity)
