@@ -21,6 +21,11 @@ type Option struct {
 	UnderlyingAsset string // Symbol of identifier of underlying security or commodity.
 }
 
+// UnderlyingAsset represents assets that can be traded as options.
+type UnderlyingAsset struct {
+    
+}
+
 // String method for Option to specify how it should be printed.
 func (o Option) String() string {
 	return fmt.Sprintf("{%s %.2f %s %s}", o.Type, o.StrikePrice, o.ExpirationDate, o.UnderlyingAsset)
@@ -57,3 +62,25 @@ type Portfolio struct {
 	CashBalance    float64
 	OptionsHolding map[OptionContract]uint
 }
+
+// UnderlyingAsset is a representation of securites or commotidites that can be
+// traded as an Option.
+type UnderlyingAsset struct {
+    AssetType AssetType
+    Ticker string
+    Description string
+}
+
+type AssetType int
+
+const (
+    StockAsset AssetType = iota
+    CommodityAsset
+)
+
+type CommodityType int
+
+const (
+    Gold CommodityType = iota
+    Silver
+)
