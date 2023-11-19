@@ -1,7 +1,7 @@
 # TraderMac
 TraderMac handles **fetching Options data** from a financial market, creating a **market** and **trading engine** 
 for **options trading** between a buyer and a seller, use the Black-Scholes-Merton model to 
-estimate price and buy the underlying asset to eliminate risks, [more features from research].
+estimate price and buy the underlying asset to eliminate risks,[more features from research]
 
 ## Run
 For now, manually create a portfolio to test the trading validation and execution:
@@ -9,6 +9,7 @@ For now, manually create a portfolio to test the trading validation and executio
 ```shell
 go run cmd/main.go
 ```
+
 Result:
 ```shell
 Initial Cash Balance: $ 10000
@@ -25,12 +26,17 @@ New Options Holding:
 - [x] Execute Trade
 - [x] Document Learnings
 - [x] Test with main function.
+- [x] Select brokerage API to get data from. AlphaVantage selected.
+- [x] Setup data fetching with API requests from AlphaVantage.co
+- [ ] Parse data to JSON and utilize it.
+- [ ] Use data in BlackScholes implementation and relevant places.
+- [ ] Connect BlackScholes implementation to everything that needs vending.
 - [ ] Remodel the UnderlyingAsset
 - [ ] Setup trader modeling and management | CRUD operations for trader.
 - [ ] Write the logic to execute actual trades from a live source.
 - [ ] Setup pipeline to simulate the execution of paper trades with a Brokerage API
 - [ ] Eventually set pipeline to execute real trades with the Brokerage API
 - [ ] Efficiently handle the TradeOrder OrderStatus property.
-- [ ] Setup pipeline to external market data sources to get real-time/historical data for each underlying asset supported. (useful for pricing options, trading strategy, risk mgt).
+- [x] Setup pipeline to external market data sources to get real-time/historical data for each underlying asset supported. (useful for pricing options, trading strategy, risk mgt).
 - [ ] Add logging and maybe monitoring
 - [ ] Write tests for everything until Coverage > 70%
