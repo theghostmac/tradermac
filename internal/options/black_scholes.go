@@ -1,6 +1,7 @@
 package options
 
 import (
+	"errors"
 	"gonum.org/v1/gonum/stat/distuv"
 	"math"
 )
@@ -60,4 +61,36 @@ func NormCumulativeDistributionFunction(x float64) float64 {
 
 	// Calculate and return the CDF at the specified value (x).
 	return normalDist.CDF(x)
+}
+
+// CalculateVolatilityIndex calculates the historical volatility for the given price data.
+func CalculateVolatilityIndex(priceData []float64) (volatility float64, err error) {
+	if len(priceData) < 2 {
+		return 0, errors.New("insufficient data for volatility calculation")
+	}
+
+	var logReturns []float64
+	for i := 1; i < len(priceData); i++ {
+		logReturn := math.Log(priceData[i] / priceData[i-1])
+		logReturns = append(logReturns, logReturn)
+	}
+
+	mean, sum := 0.0, 0.0
+	for _, lr := range logReturns {
+		mean += lr
+	}
+
+	mean /= float64(len(logReturns))
+
+	for _, lr := range logReturns {
+		sum += math.Pow(lr-mean, 2)
+	}
+
+	variance := sum / float64(len(logReturns)-1)
+	standardDeviation := math.Sqrt(variance)
+
+	// Annualized the standard deviation to represent the annual volatility
+	// Assuming 252 trading days in a year.
+	volatility = standardDeviation * math.Sqrt(252)
+	return volatility, nil
 }
