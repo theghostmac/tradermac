@@ -24,7 +24,7 @@ func BlackScholesMertonCall(currentStockPrice, strikePrice, volatility, riskFree
 	// Convert the timeToExpiration to years.
 	T := timeToExpiration / 365
 
-	// Calculate d1 and d2
+	// Calculate d1 and d2.
 	d1 := (math.Log(currentStockPrice/strikePrice) + (riskFreeRate+0.5*math.Pow(volatility, 2))*T) / (volatility * math.Sqrt(T))
 
 	d2 := d1 - volatility*math.Sqrt(T)
@@ -49,18 +49,6 @@ func BlackScholesMertonPut(currentStockPrice, strikePrice, volatility, riskFreeR
 	theoreticalPutPrice = strikePrice*math.Exp(-riskFreeRate*T)*NormCumulativeDistributionFunction(-d2) - currentStockPrice*NormCumulativeDistributionFunction(-d1)
 
 	return theoreticalPutPrice, nil
-}
-
-// NormCumulativeDistributionFunction calculates the cumulative standard normal probability distribution function.
-func NormCumulativeDistributionFunction(x float64) float64 {
-	// Create a standard normal distribution
-	normalDist := distuv.Normal{
-		Mu:    0, // mean
-		Sigma: 1, // standard deviation
-	}
-
-	// Calculate and return the CDF at the specified value (x).
-	return normalDist.CDF(x)
 }
 
 // CalculateVolatilityIndex calculates the historical volatility for the given price data.
@@ -93,4 +81,16 @@ func CalculateVolatilityIndex(priceData []float64) (volatility float64, err erro
 	// Assuming 252 trading days in a year.
 	volatility = standardDeviation * math.Sqrt(252)
 	return volatility, nil
+}
+
+// NormCumulativeDistributionFunction calculates the cumulative standard normal probability distribution function.
+func NormCumulativeDistributionFunction(x float64) float64 {
+	// Create a standard normal distribution
+	normalDist := distuv.Normal{
+		Mu:    0, // mean
+		Sigma: 1, // standard deviation
+	}
+
+	// Calculate and return the CDF at the specified value (x).
+	return normalDist.CDF(x)
 }
