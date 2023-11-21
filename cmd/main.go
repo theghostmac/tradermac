@@ -2,47 +2,68 @@ package main
 
 import (
 	"fmt"
-	"github.com/theghostmac/tradermac/internal/options"
-	"time"
+	"github.com/theghostmac/tradermac/internal/alphavantage"
+	"github.com/theghostmac/tradermac/internal/data"
+	"log"
+	"os"
 )
 
 func main() {
-	// Create a new portfolio with an initial cash balance.
-	initialCashBalance := 10000.0
-	portfolio := options.NewPortfolio(initialCashBalance)
-
-	// Display initial portfolio information.
-	fmt.Println("Initial Cash Balance: $", portfolio.CashBalance)
-	fmt.Println("Initial Options Holding: No options initially")
-
-	// Example trade order.
-	expirationDate := time.Now()
-
-	order := options.TradeOrder{
-		Action: options.Buy,
-		Option: options.Option{
-			Type:            options.Call,
-			StrikePrice:     150,
-			ExpirationDate:  expirationDate,
-			UnderlyingAsset: "AAPL",
-		},
-		Quantity:    5,
-		OrderPrice:  10.0,
-		OrderStatus: "Open",
-		PortfolioID: 1,
-	}
-
-	// Execute the trade.
-	err := options.ExecuteTrade(portfolio, order)
+	// Create a new AlphaVantageClient
+	avClient, err := data.NewAlphaVantageClient()
 	if err != nil {
-		fmt.Println("Trade execution failed: ", err)
-		return
+		log.Fatalf("Error creating AlphaVantage client: %v", err)
 	}
 
-	// Display updated portfolio information.
-	fmt.Println("New Cash Balance: $", portfolio.CashBalance)
-	fmt.Println("New Options Holding:")
-	for contract, quantity := range portfolio.OptionsHolding {
-		fmt.Printf("- %s: %d contracts\n", contract.Option, quantity)
+	// Example: Fetch global quote data
+	symbol := "AAPL" // Replace with the desired stock symbol
+
+	// Log API key for debugging
+	apiKey := os.Getenv("ALPHAVANTAGE_MARKET_API_KEY")
+	log.Printf("Using API Key: %s", apiKey)
+
+	globalQuoteData, err := fetchGlobalQuote(avClient, symbol)
+	if err != nil {
+		log.Fatalf("Error fetching global quote data: %v", err)
 	}
+	fmt.Println("Global Quote Data:")
+	fmt.Println(globalQuoteData)
+
+	// Example: Fetch time series daily data
+	timeSeriesDailyData, err := fetchTimeSeriesDaily(avClient, symbol)
+	if err != nil {
+		log.Fatalf("Error fetching time series daily data: %v", err)
+	}
+	fmt.Println("Time Series Daily Data:")
+	fmt.Println(timeSeriesDailyData)
+}
+
+func fetchGlobalQuote(avClient *data.AlphaVantageClient, symbol string) (string, error) {
+	apiReq := alphavantage.NewAPIRequest().
+		SetAPIReqMethod("GET").
+		SetAPIReqPath("query").
+		SetAPIReqParam("function", "GLOBAL_QUOTE").
+		SetAPIReqParam("symbol", symbol)
+
+	response, err := avClient.CallAlphaVantageAPI(apiReq)
+	if err != nil {
+		return "", err
+	}
+
+	return response, nil
+}
+
+func fetchTimeSeriesDaily(avClient *data.AlphaVantageClient, symbol string) (string, error) {
+	apiReq := alphavantage.NewAPIRequest().
+		SetAPIReqMethod("GET").
+		SetAPIReqPath("query").
+		SetAPIReqParam("function", "TIME_SERIES_DAILY").
+		SetAPIReqParam("symbol", symbol)
+
+	response, err := avClient.CallAlphaVantageAPI(apiReq)
+	if err != nil {
+		return "", err
+	}
+
+	return response, nil
 }

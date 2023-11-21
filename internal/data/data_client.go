@@ -28,6 +28,10 @@ func NewAlphaVantageClient() (*AlphaVantageClient, error) {
 	return &AlphaVantageClient{client: client}, nil
 }
 
+func (avClient *AlphaVantageClient) CallAlphaVantageAPI(apiReq *alphavantage.APIRequest) (string, error) {
+	return avClient.client.CallAlphaVantageAPI(apiReq)
+}
+
 func NewConfig() (configuration *alphavantage.Configuration, err error) {
 	apiUrl := os.Getenv("ALPHAVANTAGE_API_URL")
 	keyName := os.Getenv("ALPHAVANTAGE_KEY_NAME")
