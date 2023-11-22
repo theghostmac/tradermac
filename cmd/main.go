@@ -1,69 +1,47 @@
 package main
 
 import (
+	"crypto/tls"
 	"fmt"
+	"log"
+	"net/http"
+	"os"
+	"time"
+
 	"github.com/theghostmac/tradermac/internal/alphavantage"
 	"github.com/theghostmac/tradermac/internal/data"
-	"log"
-	"os"
 )
 
 func main() {
-	// Create a new AlphaVantageClient
-	avClient, err := data.NewAlphaVantageClient()
+	var (
+		httpTransport = &http.Transport{
+			TLSClientConfig: &tls.Config{
+				InsecureSkipVerify: true,
+			},
+		}
+		httpClient = &http.Client{
+			Transport: httpTransport,
+			Timeout:   time.Second * 15,
+		}
+	)
+
+	var APIKEY = os.Getenv("ALPHAVANTAGE_MARKET_API_KEY")
+
+	avc := alphavantage.NewRequestClient("https://www.alphavantage.co/query?", httpClient)
+	mkd := data.NewMarketData(avc)
+	time_series, err := mkd.GetTimeSeriesDaily("TIME_SERIES_DAILY", "IBM", APIKEY)
 	if err != nil {
-		log.Fatalf("Error creating AlphaVantage client: %v", err)
+		log.Printf("cannot fetch time series daily: '%s\n'", err)
+		return
 	}
+	/* print to stdout */
+	fmt.Printf("time series daily: '%s\n'", time_series)
 
-	// Example: Fetch global quote data
-	symbol := "AAPL" // Replace with the desired stock symbol
-
-	// Log API key for debugging
-	apiKey := os.Getenv("ALPHAVANTAGE_MARKET_API_KEY")
-	log.Printf("Using API Key: %s", apiKey)
-
-	globalQuoteData, err := fetchGlobalQuote(avClient, symbol)
+	stock_quote, err := mkd.GetTimeSeriesDaily("GLOBAL_QUOTE", "IBM", APIKEY)
 	if err != nil {
-		log.Fatalf("Error fetching global quote data: %v", err)
+		log.Printf("cannot fetch time series daily: '%s\n'", err)
+		return
 	}
-	fmt.Println("Global Quote Data:")
-	fmt.Println(globalQuoteData)
-
-	// Example: Fetch time series daily data
-	timeSeriesDailyData, err := fetchTimeSeriesDaily(avClient, symbol)
-	if err != nil {
-		log.Fatalf("Error fetching time series daily data: %v", err)
-	}
-	fmt.Println("Time Series Daily Data:")
-	fmt.Println(timeSeriesDailyData)
-}
-
-func fetchGlobalQuote(avClient *data.AlphaVantageClient, symbol string) (string, error) {
-	apiReq := alphavantage.NewAPIRequest().
-		SetAPIReqMethod("GET").
-		SetAPIReqPath("query").
-		SetAPIReqParam("function", "GLOBAL_QUOTE").
-		SetAPIReqParam("symbol", symbol)
-
-	response, err := avClient.CallAlphaVantageAPI(apiReq)
-	if err != nil {
-		return "", err
-	}
-
-	return response, nil
-}
-
-func fetchTimeSeriesDaily(avClient *data.AlphaVantageClient, symbol string) (string, error) {
-	apiReq := alphavantage.NewAPIRequest().
-		SetAPIReqMethod("GET").
-		SetAPIReqPath("query").
-		SetAPIReqParam("function", "TIME_SERIES_DAILY").
-		SetAPIReqParam("symbol", symbol)
-
-	response, err := avClient.CallAlphaVantageAPI(apiReq)
-	if err != nil {
-		return "", err
-	}
-
-	return response, nil
+	/* print to stdout */
+	fmt.Printf("global stock quote data: '%s\n'", stock_quote)
 }

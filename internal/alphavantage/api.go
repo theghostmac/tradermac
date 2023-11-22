@@ -51,28 +51,6 @@ func (ac *APIClient) CallAlphaVantageAPI(apiReq *APIRequest) (string, error) {
 	return string(body), nil
 }
 
-//func buildHttpRequest(apiReq *APIRequest, config Configuration) (*http.Request, error) {
-//	endpoint := config.URL + apiReq.path
-//	req, err := http.NewRequest(apiReq.method, endpoint, nil)
-//	if err != nil {
-//		log.Println("Build HTTP Request: ", err)
-//		return nil, err
-//	}
-//
-//	query := req.URL.Query()
-//	for key, value := range config.APIKeys {
-//		query.Add(key, value)
-//	}
-//
-//	for param, value := range apiReq.params {
-//		query.Add(param, value)
-//	}
-//
-//	req.URL.RawQuery = query.Encode()
-//
-//	return req, nil
-//}
-
 func buildHttpRequest(apiReq *APIRequest, config Configuration) (*http.Request, error) {
 	endpoint := config.URL + apiReq.path
 	req, err := http.NewRequest(apiReq.method, endpoint, nil)
@@ -81,14 +59,36 @@ func buildHttpRequest(apiReq *APIRequest, config Configuration) (*http.Request, 
 		return nil, err
 	}
 
-	// Add API key to the URL query
+	query := req.URL.Query()
 	for key, value := range config.APIKeys {
-		req.URL.Query().Add(key, value)
+		query.Add(key, value)
 	}
 
 	for param, value := range apiReq.params {
-		req.URL.Query().Add(param, value)
+		query.Add(param, value)
 	}
+
+	req.URL.RawQuery = query.Encode()
 
 	return req, nil
 }
+
+// func buildHttpRequest(apiReq *APIRequest, config Configuration) (*http.Request, error) {
+// 	endpoint := config.URL + apiReq.path
+// 	req, err := http.NewRequest(apiReq.method, endpoint, nil)
+// 	if err != nil {
+// 		log.Println("Build HTTP Request: ", err)
+// 		return nil, err
+// 	}
+
+// 	// Add API key to the URL query
+// 	for key, value := range config.APIKeys {
+// 		req.URL.Query().Add(key, value)
+// 	}
+
+// 	for param, value := range apiReq.params {
+// 		req.URL.Query().Add(param, value)
+// 	}
+
+// 	return req, nil
+// }
