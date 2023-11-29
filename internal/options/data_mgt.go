@@ -97,7 +97,42 @@ func GetHistoricalData(db *sql.DB, symbol string, startDate, endDate time.Time) 
 		data = append(data, hd)
 	}
 
-	return data, nil
+	var processedData []HistoricalData
+	for _, hd := range data {
+		// Process each data point
+		// Example: validate or transform the data as needed
+		if hd.Price < 0 {
+			hd.Price = 0 // or handle it as needed
+		}
+		if hd.Volume < 0 {
+			hd.Volume = 0 // or handle it as needed
+		}
+		processedData = append(processedData, hd)
+	}
+
+	return processedData, nil
+}
+
+// GetIVData retrieves implied volatility data from the database.
+func GetIVData(db *sql.DB, symbol string, startDate, endDate time.Time) ([]ImpliedVolatility, error) {
+	rows, err := db.Query("SELECT option_symbol, implied_volatility, calculation_date FROM ImpliedVolatility WHERE option_symbol = $1 AND calculation_date BETWEEN $2 AND $3", symbol, startDate, endDate)
+	if err != nil {
+		log.Printf("Error retrieving IV data: %v\n", err)
+		return nil, err
+	}
+	defer rows.Close()
+
+	var ivData []ImpliedVolatility
+	for rows.Next() {
+		var iv ImpliedVolatility
+		if err := rows.Scan(&iv.OptionSymbol, &iv.ImpliedVol, &iv.Date); err != nil {
+			log.Printf("Error scanning row: %v", err)
+			continue
+		}
+		ivData = append(ivData, iv)
+	}
+
+	return ivData, nil
 }
 
 // GetDBConnection establishes a connection to the PostgreSQL database.
