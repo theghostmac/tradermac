@@ -1,9 +1,10 @@
 package options
 
 import (
-	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
+	"regexp"
 )
 
 // NewPortfolio creates a new portfolio with an initial cash balance.
@@ -24,24 +25,30 @@ func (p *Portfolio) PrintStatus() {
 	}
 }
 
-// GetOptionBySymbol returns the Option object for a given symbol.
+// GetOptionBySymbol scrapes options data for a given symbol from Yahoo! Finance and returns the Option object for a given symbol.
 func GetOptionBySymbol(symbol string) (Option, error) {
-	// TODO: implement this function to fetch Options from a data broker online.
+	url := "https://finance.yahoo.com/quote/" + symbol + "/options?p=" + symbol
 
-	// Fetch options details from and external data source.
-	// make HTTP requests and parse the response.
+	resp, err := http.Get(url)
+	if err != nil {
+		return Option{}, err
+	}
+	defer resp.Body.Close()
 
-	resp, err := http.Get("")
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return Option{}, err
 	}
 
-	defer resp.Body.Close()
+	// Use regular express or HTML parsing library to extract data.
+	match := regexp.MustCompile(``).FindSubmatch(body)
+	if match == nil {
 
-	var option Option
-	if err := json.NewDecoder(resp.Body).Decode(&option); err != nil {
-		return Option{}, err
 	}
 
-	return Option{}, nil
+	option := Option{
+		// Values
+	}
+
+	return option, nil
 }
