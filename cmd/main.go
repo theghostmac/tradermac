@@ -3,6 +3,7 @@ package main
 import (
 	"crypto/tls"
 	"fmt"
+	"github.com/theghostmac/tradermac/internal/backtest"
 	"github.com/theghostmac/tradermac/internal/options"
 	"log"
 	"net/http"
@@ -63,4 +64,16 @@ func main() {
 
 	// TODO: Thoroughly test ProcessTimeSeriesData with various data inputs to ensure it handles different scenarios correctly, including malformed data and edge cases.
 	data.ProcessTimeSeriesData(time_series, db)
+
+	// Define backtest parameters.
+	startDate := time.Date(2023, 11, 20, 0, 0, 0, 0, time.UTC)
+	endDate := time.Date(2023, 11, 28, 0, 0, 0, 0, time.UTC)
+	symbol := "IBM"
+	initialCapital := 10_000.0
+
+	// Create a new backtest instance.
+	bt := backtest.NewBacktest(db, startDate, endDate, symbol, initialCapital)
+
+	// Run the backtest.
+	bt.Run()
 }

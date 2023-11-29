@@ -24,8 +24,8 @@ A higher threshold (e.g., 2.5 or 3) will result in fewer, potentially more signi
 A lower threshold (e.g., 1.5) will produce more signals, which could be beneficial in a highly volatile market, but may increase the risk of false positives.
 */
 
-// generateSignals analyzes database IV data and underlying asset data to generate trading signals.
-func generateSignals(db *sql.DB, optionSymbol string, startDate, endDate time.Time) ([]options.TradingSignal, error) {
+// GenerateSignals analyzes database IV data and underlying asset data to generate trading signals.
+func GenerateSignals(db *sql.DB, optionSymbol string, startDate, endDate time.Time) ([]options.TradingSignal, error) {
 	// Retrieve historical data for the underlying asset.
 	historicalData, err := options.GetHistoricalData(db, optionSymbol, startDate, endDate)
 	if err != nil {
