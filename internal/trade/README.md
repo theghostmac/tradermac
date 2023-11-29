@@ -1,5 +1,6 @@
 # Trade
-In this directory, all I do is write my learnings on trading strategies.
+In this directory, all I do is implement my learnings on trading strategies.
+A friend told me it's better to combine two strategies together to achieve something better.
 
 ## Strategies
 Here's a list of common trading strategies, along with a brief description 

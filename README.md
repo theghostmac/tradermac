@@ -1,98 +1,78 @@
 # TraderMac
 
-TraderMac handles **fetching Options data** from a financial market, creating a **market** and **trading engine** 
-for **options trading** between a buyer and a seller, use the Black-Scholes-Merton model to 
-estimate price and buy the underlying asset to eliminate risks,[more features from research]
+TraderMac is a sophisticated trading platform focused on options trading. 
+It integrates various financial data sources to provide real-time analysis, 
+trading signal generation, and portfolio management, specifically tailored for options trading.
 
-## Run
+## Features (see TODO section for more coming features)
 
-For now, manually create a portfolio to test the trading validation and execution:
+- Modeling options contracts including calls and puts.
+- Functions to calculate options value, risk metrics (delta, gamma, theta, vega), and execute trades.
+- Integration with external data sources for real-time market data.
+- A backtesting environment to simulate trading strategies on historical data.
+- Portfolio management capabilities to track and manage trading activities.
 
-```shell
-go run cmd/main.go
-```
+## Getting Started
 
-Result:
+### Prerequisites
 
-```shell
-Initial Cash Balance: $ 10000
-Initial Options Holding: No options initially
-New Cash Balance: $ 9950
-New Options Holding:
-- {Call 150.00 2023-11-12 14:41:33.476395 +0100 WAT m=+0.000110918 AAPL}: 5 contracts
-```
+- Go (version 1.16 - 1.21)
+- PostgreSQL
+- Access to financial data APIs (e.g., Alpha Vantage)
 
-## TODO:
+### Installation
+
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/yourusername/tradermac.git
+   ```
+
+2. Navigate to the project directory:
+   ```sh
+   cd tradermac
+   ```
+
+3. Install dependencies (if any):
+   ```sh
+   go get ./...
+   ```
+
+4. Set up the environment variables:
+    - `DATABASE_URL`: Your PostgreSQL database URL.
+    - `ALPHAVANTAGE_API_KEY`: Your API key for Alpha Vantage.
+
+5. Run the application:
+   ```sh
+   go run main.go
+   ```
+
+### Configuration
+
+- Configure database and API credentials in `.env` file or as environment variables.
+
+## Usage
+
+For now, I am using a dummy portfolio to backtest the model.
+
+## TODO
 
 - [x] Model an Options Contract
-- [x] Calculate Options value
-- [x] Validate a Trade Action
-- [x] Execute Trade
-- [x] Document Learnings
-- [x] Test with main function.
-- [x] Select brokerage API to get data from. AlphaVantage selected.
-- [x] Setup data fetching with API requests from AlphaVantage.co
-- [ ] Parse data to JSON and utilize it.
-- [ ] Use data in BlackScholes implementation and relevant places.
-- [ ] Connect BlackScholes implementation to everything that needs vending.
-- [ ] Remodel the UnderlyingAsset
-- [ ] Setup trader modeling and management | CRUD operations for trader.
-- [ ] Write the logic to execute actual trades from a live source.
-- [ ] Setup pipeline to simulate the execution of paper trades with a Brokerage API
-- [ ] Eventually set pipeline to execute real trades with the Brokerage API
-- [ ] Efficiently handle the TradeOrder OrderStatus property.
-- [x] Setup pipeline to external market data sources to get real-time/historical data for each underlying asset supported. (useful for pricing options, trading strategy, risk mgt).
-- [ ] Add logging and maybe monitoring
-- [ ] Write tests for everything until Coverage > 70%
+- [x] Implement data fetching from Alpha Vantage
+- [x] Create database schema for options data
+- [x] Develop functions for options valuation and risk management
+- [x] Build a backtesting environment for strategy testing
+- [x] Implement portfolio management features
+- [ ] Integrate real-time data fetching from Yahoo Finance
+- [ ] Refine `GetOptionBySymbol` function to ensure accurate data retrieval
+- [ ] Implement comprehensive error handling and logging
+- [ ] Optimize performance for high-frequency trading scenarios
+- [ ] Conduct thorough testing of all components
+- [ ] Deploy the application in a cloud environment
+- [ ] Test in a live environment
 
-# Time Series
+## Resources
 
-```shell
-'tsd:'
-{
-    "Meta Data": {
-        "1. Information": "Daily Prices (open, high, low, close) and Volumes",
-        "2. Symbol": "IBM",
-        "3. Last Refreshed": "2023-11-21",
-        "4. Output Size": "Compact",
-        "5. Time Zone": "US/Eastern"
-    },
-    "Time Series (Daily)": {
-        "2023-11-21": {
-            "1. open": "154.6000",
-            "2. high": "154.6600",
-            "3. low": "153.5100",
-            "4. close": "153.9100",
-            "5. volume": "2859508"
-        },
-        "2023-11-20": {
-            "1. open": "152.5100",
-            "2. high": "154.6800",
-            "3. low": "152.3500",
-            "4. close": "154.3500",
-            "5. volume": "3658936"
-        }
-         ...
-```
+Resources I must remember to consume later live here.
 
-# Quote Response
-
-```shell
- request took '220.170083ms
-' to process
-raw response: '
-{
-    "Global Quote": {
-        "01. symbol": "IBM",
-        "02. open": "154.6000",
-        "03. high": "154.6600",
-        "04. low": "153.5100",
-        "05. price": "153.9100",
-        "06. volume": "2859508",
-        "07. latest trading day": "2023-11-21",
-        "08. previous close": "154.3500",
-        "09. change": "-0.4400",
-        "10. change percent": "-0.2851%"
-    }
-}
-```
+1. [Awesome Systematic Trading](https://wangzhe3224.github.io/awesome-systematic-trading/#general-purpose)
+2. 

@@ -1,8 +1,6 @@
-Combining multiple trading strategies to achieve a balanced, profit-seeking approach is 
-indeed a sensible idea, especially in the context of options trading. Here's a strategy that blends 
-elements of mean reversion and trend following, tailored for the options market:
+# Combined Strategy: Mean Reversion with Trend Confirmation
 
-### Combined Strategy: Mean Reversion with Trend Confirmation
+This is strategy that blends elements of mean reversion and trend following, tailored for the options market:
 
 #### 1. **Mean Reversion Component**:
 - **Idea**: Identify options that are significantly deviating from their historical average implied volatility (IV). This could indicate they are overbought or oversold.
@@ -38,7 +36,3 @@ You'll need to implement several components in your Go codebase:
 
 5. **Risk Management System**: Incorporate a system to manage the risk of each trade.
 
-This strategy aims to exploit short-term inefficiencies in the options market while aligning with the longer-term trend 
-of the underlying asset, seeking to balance profit potential with risk management. Remember, all trading strategies 
-carry risk, and it's crucial to backtest thoroughly using historical data before live implementation. 
-Additionally, continually monitor and adjust the strategy as market conditions change.
