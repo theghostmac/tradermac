@@ -54,4 +54,13 @@ func main() {
 	}
 	/* print to stdout */
 	fmt.Printf("global stock quote data: '%s\n'", stockQuote)
+
+	time_series, err = mkd.GetTimeSeriesDaily("TIME_SERIES_DAILY", "IBM", APIKEY)
+	if err != nil {
+		log.Printf("cannot fetch time series daily: %s\n", err)
+		return
+	}
+
+	// TODO: Thoroughly test ProcessTimeSeriesData with various data inputs to ensure it handles different scenarios correctly, including malformed data and edge cases.
+	data.ProcessTimeSeriesData(time_series, db)
 }
