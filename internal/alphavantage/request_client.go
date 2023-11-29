@@ -15,25 +15,25 @@ type Client interface {
 	DoRequest(r *http.Request) (*http.Response, error)
 }
 
-var _ Client = &requestClient{}
+var _ Client = &RequestClient{}
 
-type requestClient struct {
-	dataHost string
+type RequestClient struct {
+	dataHost   string
 	httpClient *http.Client
 }
 
-func NewRequestClient(dataHost string, httpClient *http.Client) *requestClient {
-	return &requestClient{
-		dataHost: dataHost,
+func NewRequestClient(dataHost string, httpClient *http.Client) *RequestClient {
+	return &RequestClient{
+		dataHost:   dataHost,
 		httpClient: httpClient,
 	}
 }
 
-func (client *requestClient) MakeRequest(path, method, reqBody string, headers map[string]string) (*http.Request, error) {
+func (client *RequestClient) MakeRequest(path, method, reqBody string, headers map[string]string) (*http.Request, error) {
 	var (
-		url = fmt.Sprintf("%s%s", client.dataHost, path)
-		req *http.Request
-		err error
+		url  = fmt.Sprintf("%s%s", client.dataHost, path)
+		req  *http.Request
+		err  error
 		body io.Reader
 	)
 
@@ -42,10 +42,10 @@ func (client *requestClient) MakeRequest(path, method, reqBody string, headers m
 	}
 
 	req, err = http.NewRequest(method, url, body)
-	if err !=nil {
+	if err != nil {
 		log.Printf("error processing request: %v", err)
 		firstErr := errors.New(err.Error())
-		secondErr := errors.New("Base request error on new request")
+		secondErr := errors.New("base request error on new request")
 		// Join the errors for better tracking on large request data.
 		fullErrorMsg := errors.Join(firstErr, secondErr)
 		return nil, fullErrorMsg
@@ -65,7 +65,7 @@ func (client *requestClient) MakeRequest(path, method, reqBody string, headers m
 	return req, nil
 }
 
-func (client *requestClient) DoRequest(r *http.Request) (*http.Response, error) {
+func (client *RequestClient) DoRequest(r *http.Request) (*http.Response, error) {
 	start := time.Now()
 	res, err := client.httpClient.Do(r)
 	if err != nil {

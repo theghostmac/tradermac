@@ -19,6 +19,7 @@ type Option struct {
 	StrikePrice     float64
 	ExpirationDate  time.Time
 	UnderlyingAsset string // Symbol of identifier of underlying security or commodity.
+	UnderlyingPrice float64
 }
 
 // String method for Option to specify how it should be printed.
@@ -71,3 +72,24 @@ const (
 	Gold CommodityType = iota
 	Silver
 )
+
+// HistoricalData represents the historical data for a specific asset.
+type HistoricalData struct {
+	Date   time.Time
+	Price  float64
+	Volume int64
+}
+
+// ImpliedVolatility represents the implied volatility for a specific asset.
+type ImpliedVolatility struct {
+	Date         time.Time
+	ImpliedVol   float64
+	OptionSymbol string
+}
+
+// TradingSignal represents the trading signal for a specific asset.
+type TradingSignal struct {
+	Action       TradeAction // Buy or Sell
+	SignalType   string      // "Overbought", or "Oversold"
+	OptionSymbol string
+}
