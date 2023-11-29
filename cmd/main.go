@@ -3,6 +3,7 @@ package main
 import (
 	"crypto/tls"
 	"fmt"
+	"github.com/theghostmac/tradermac/internal/options"
 	"log"
 	"net/http"
 	"os"
@@ -13,6 +14,15 @@ import (
 )
 
 func main() {
+	db := options.GetDBConnection()
+	defer db.Close()
+
+	// Create the ImpliedVolatility table.
+	options.CreateImpliedVolatilityTable(db)
+
+	// Create the HistoricalData table.
+	options.CreateHistoricalDataTable(db)
+
 	var (
 		httpTransport = &http.Transport{
 			TLSClientConfig: &tls.Config{
@@ -37,11 +47,11 @@ func main() {
 	/* print to stdout */
 	fmt.Printf("time series daily: '%s\n'", time_series)
 
-	stock_quote, err := mkd.GetTimeSeriesDaily("GLOBAL_QUOTE", "IBM", APIKEY)
+	stockQuote, err := mkd.GetTimeSeriesDaily("GLOBAL_QUOTE", "IBM", APIKEY)
 	if err != nil {
 		log.Printf("cannot fetch time series daily: '%s\n'", err)
 		return
 	}
 	/* print to stdout */
-	fmt.Printf("global stock quote data: '%s\n'", stock_quote)
+	fmt.Printf("global stock quote data: '%s\n'", stockQuote)
 }

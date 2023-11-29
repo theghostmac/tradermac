@@ -75,6 +75,7 @@ const (
 
 // HistoricalData represents the historical data for a specific asset.
 type HistoricalData struct {
+	Symbol string
 	Date   time.Time
 	Price  float64
 	Volume int64
