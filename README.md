@@ -1,7 +1,7 @@
 # TraderMac
 
-TraderMac is a sophisticated trading platform focused on options trading. 
-It integrates various financial data sources to provide real-time analysis, 
+TraderMac is a sophisticated trading platform focused on options trading.
+It integrates various financial data sources to provide real-time analysis,
 trading signal generation, and portfolio management, specifically tailored for options trading.
 
 ## Features (see TODO section for more coming features)
@@ -23,16 +23,19 @@ trading signal generation, and portfolio management, specifically tailored for o
 ### Installation
 
 1. Clone the repository:
+
    ```sh
    git clone https://github.com/yourusername/tradermac.git
    ```
 
 2. Navigate to the project directory:
+
    ```sh
    cd tradermac
    ```
 
 3. Install dependencies (if any):
+
    ```sh
    go get ./...
    ```
@@ -42,6 +45,7 @@ trading signal generation, and portfolio management, specifically tailored for o
     - `ALPHAVANTAGE_API_KEY`: Your API key for Alpha Vantage.
 
 5. Run the application:
+
    ```sh
    go run main.go
    ```
@@ -69,10 +73,10 @@ For now, I am using a dummy portfolio to backtest the model.
 - [ ] Conduct thorough testing of all components
 - [ ] Deploy the application in a cloud environment
 - [ ] Test in a live environment
+- [ ] Find a way to replace all `const` components with dynamic implementations, in `trade`.
 
 ## Resources
 
 Resources I must remember to consume later live here.
 
 1. [Awesome Systematic Trading](https://wangzhe3224.github.io/awesome-systematic-trading/#general-purpose)
-2. 

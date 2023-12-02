@@ -35,4 +35,3 @@ You'll need to implement several components in your Go codebase:
 4. **Trade Execution Logic**: Implement logic to execute trades based on generated signals, considering current market prices and portfolio holdings.
 
 5. **Risk Management System**: Incorporate a system to manage the risk of each trade.
-
